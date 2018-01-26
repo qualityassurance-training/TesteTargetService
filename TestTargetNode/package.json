@@ -1,0 +1,12 @@
+{
+  "name": "test-target-node",
+  "version": "0.0.0",
+  "description": "TestTargetNode",
+  "main": "app.js",
+  "author": {
+    "name": "kaossp"
+  },
+  "dependencies": {
+    "mssql": "^4.1.0"
+  }
+}
