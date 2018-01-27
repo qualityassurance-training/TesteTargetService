@@ -1,22 +1,30 @@
-﻿var db = require("../core/db");
+﻿var db = require("../core/db-mongo");
+var httpMsgs = require("../core/httpMsgs")
+const currentCollection = "products";
 
 exports.getList = function (req, resp) {
-    db.executeSQL("SELECT * FROM Products", function (data, err) {
+    db.findAll(currentCollection, function (data, err) {
         if (err) {
-            resp.writeHead(500, "Internal Error occured", { "Content-Type": "text/html" });
-            resp.write("<html><head><title>500</title></head><body> 500: Internal Error. Details: " + err + "</body></html>");
+            httpMsgs.show500(req, resp, err);
         } else {
-            resp.writeHead(200, { "Content-Type": "application/json" });
-            resp.write(JSON.stringify(data.recordset));
+            httpMsgs.sendJson(req, resp, data);
         }
-
-        resp.end();
     });
 };
 
-exports.get = function (req, resp, id) {
-
+exports.getOne = function (req, resp, id) {
+    db.findOne(currentCollection, id, function (data, err) {
+        if (err) {
+            httpMsgs.show500(req, resp, err);
+        } else {
+            httpMsgs.sendJson(req, resp, data);
+        }
+    });
 };
+
+exports.ObjectIdisValid = function (id, callback) {
+    db.ObjectIdisValid(id, function (valid) { callback(valid); });
+}
 
 exports.add = function (req, resp, reqBody) {
 
